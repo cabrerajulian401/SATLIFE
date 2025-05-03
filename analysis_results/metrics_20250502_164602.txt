@@ -1,0 +1,5 @@
+mean_rmse: 1.9991227505537568
+std_rmse: 7.275109821609835e-06
+best_params: {'fit_intercept': True, 'positive': True}
+best_score: 1.9991101496939152
+test_metrics: {'RMSE': np.float64(2.0100568336339446), 'R2': 0.6617332583835874, 'MAE': 0.9257781142488533}
