@@ -7,7 +7,6 @@ import seaborn as sns
 df = pd.read_csv('UCS-Satellite-Database 5-1-2023.csv') 
 
 def create_missing_values_chart():
-    """Create bar chart of missing values with smaller y-axis labels"""
     
     
     missing_data = df.isnull().sum()
@@ -52,7 +51,7 @@ def create_missing_values_chart():
     plt.close()
 
 def analyze_missing_data_metrics():
-    """Calculate comprehensive metrics for missing data analysis"""
+
     
     # Basic counts
     total_columns = len(df.columns)
@@ -64,21 +63,14 @@ def analyze_missing_data_metrics():
     missing_columns_percentage = (len(columns_with_missing) / total_columns) * 100
     
    
-    print(f"• Total Columns: {total_columns}")
-    print(f"• Columns with Missing Values: {len(columns_with_missing)} out of {total_columns}")
-    print(f"• Column Completeness Ratio: {column_completeness_ratio:.2f}")
-    print(f"• Percentage of Columns Affected: {missing_columns_percentage:.1f}%")
+
     
     # Calculating severity levels
     severe_missing = len(missing_data[missing_data > len(df)*0.5])  # >50% missing
     moderate_missing = len(missing_data[(missing_data > len(df)*0.2) & (missing_data <= len(df)*0.5)])  # 20-50% missing
     mild_missing = len(missing_data[(missing_data > 0) & (missing_data <= len(df)*0.2)])  # <20% missing
     
-    print("\n2. Missing Data Severity:")
-    print(f"• Severe (>50% missing): {severe_missing} columns")
-    print(f"• Moderate (20-50% missing): {moderate_missing} columns")
-    print(f"• Mild (<20% missing): {mild_missing} columns")
-    
+   
     # Create severity visualization
     plt.figure(figsize=(10, 6))
     severity_data = [severe_missing, moderate_missing, mild_missing, 
@@ -95,10 +87,6 @@ def analyze_missing_data_metrics():
     plt.close()
     
     
-    print("\n3. Detailed Column Analysis:")
-    print(f"• Complete Columns: {total_columns - len(columns_with_missing)}")
-    print(f"• Incomplete Columns: {len(columns_with_missing)}")
-    print("\nColumns with missing values (sorted by severity):")
     
     for col, count in columns_with_missing.sort_values(ascending=False).items():
         percentage = (count/len(df))*100
