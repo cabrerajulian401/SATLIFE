@@ -55,5 +55,4 @@ selected_features = df_encoded.drop(columns=[target]).columns[selector.get_suppo
 # Remove contractor and '_Unknown' features
 selected_features = [feat for feat in selected_features if not feat.startswith('Contractor_')]
 selected_features = [feat for feat in selected_features if '_Unknown' not in feat]
-print("Top features after removing contractor and '_Unknown' columns:", list(selected_features))
 
