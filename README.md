@@ -1,21 +1,19 @@
 # SATLIFE: Advancing Satellite Lifetime Prediction through Machine Learning
 
 ## Overview
-
 SATLIFE addresses the critical challenge of accurately predicting the operational lifetime of Earth-orbiting satellites using machine learning techniques. This project develops a robust, data-driven predictive model capable of providing reliable estimates of satellite lifespan in years, leveraging comprehensive satellite operational data and advanced regression modeling.
 
 ## Project Objectives
-
 - Develop and evaluate a machine learning regression model for satellite lifetime prediction
 - Analyze factors influencing satellite operational longevity
 - Provide insights for strategic planning in satellite design and space debris mitigation
 - Enable optimized resource allocation within complex space programs
 
 ## Dataset
+The project utilizes the Union of Concerned Scientists (UCS) Satellite Database (May 1, 2023 snapshot), containing:
 
-The project utilizes the **Union of Concerned Scientists (UCS) Satellite Database** (May 1, 2023 snapshot), containing:
-- **7,562 distinct satellites**
-- **67 features** encompassing operational parameters, physical characteristics, and orbital specifics
+- 7,562 distinct satellites
+- 67 features encompassing operational parameters, physical characteristics, and orbital specifics
 - Key attributes include power consumption, mass, orbital class, inclination, launch information, and operator details
 
 ## Key Findings
@@ -26,34 +24,41 @@ The project utilizes the **Union of Concerned Scientists (UCS) Satellite Databas
 - **Mean Absolute Error (MAE)**: ~1.926 years
 
 ### Critical Insights
-1. **Orbital Inclination Impact**: Strong negative correlation (-0.517) between satellite inclination and expected lifetime
-2. **Mission Type Variation**: Significant differences in operational lifetimes across orbit classes (LEO, GEO, MEO, Elliptical)
-3. **Feature Importance**: Inclination and orbital class emerged as primary predictive factors
+- **Orbital Inclination Impact**: Strong negative correlation (-0.517) between satellite inclination and expected lifetime
+- **Mission Type Variation**: Significant differences in operational lifetimes across orbit classes (LEO, GEO, MEO, Elliptical)
+- **Feature Selection**: Analysis focused on **two primary feature types**:
+  - **Inclination (degrees)**: Numerical feature representing orbital inclination angle
+  - **Class of Orbit**: One-hot encoded categorical features for different orbital classes (GEO, LEO, MEO, Elliptical, etc.)
 
 ## Methodology
 
 ### Data Preprocessing
-1. **Missing Data Handling**: Strategic imputation using median values for numerical features and "Unknown" categories for categorical data
-2. **Feature Engineering**: One-hot encoding for categorical variables, particularly orbital class
-3. **Feature Selection**: Targeted selection focusing on inclination and orbital class features
-4. **Normalization**: StandardScaler applied to numerical features
-5. **Train-Test Split**: 80% training, 20% testing with reproducible random state
+- **Missing Data Handling**: Strategic removal of rows with missing values in critical features (Expected Lifetime, Inclination, Class of Orbit)
+- **Feature Engineering**: One-hot encoding for categorical variables, particularly orbital class
+- **Feature Selection**: Targeted selection focusing on **inclination and orbital class features only**
+- **Normalization**: StandardScaler applied to numerical features (Inclination)
+- **Train-Test Split**: 80% training, 20% testing with reproducible random state
 
 ### Model Architecture
-**Multiple Linear Regression (MLR)** selected for:
+Multiple Linear Regression (MLR) selected for:
+
 - Interpretability and transparency
 - Computational efficiency
 - Strong baseline performance for linear relationships
 - Clear coefficient interpretation for stakeholder communication
 
-**Model Equation**:
+**Model Equation:**
 ```
 Predicted_Lifetime = β₀ + β₁(Inclination_scaled) + β₂(Class_of_Orbit_GEO) + ... + βₙ(Class_of_Orbit_Other) + ε
 ```
 
+**Final Feature Set:**
+- 1 numerical feature: `Inclination (degrees)` (standardized)
+- Multiple binary features: All one-hot encoded orbital classes (`Class of Orbit_*`)
+
 ### Hyperparameter Optimization
-- **GridSearchCV** with 5-fold cross-validation
-- Optimized parameters: `fit_intercept` and `positive` constraints
+- GridSearchCV with 5-fold cross-validation
+- Optimized parameters: fit_intercept and positive constraints
 - Negative RMSE scoring for performance maximization
 
 ## Technical Implementation
@@ -66,15 +71,17 @@ Predicted_Lifetime = β₀ + β₁(Inclination_scaled) + β₂(Class_of_Orbit_GE
 - **matplotlib**: Data visualization
 
 ### Key Scripts
-- `ML.py`: Main model training and evaluation
-- `eda.py`: Exploratory data analysis
-- `missing_counts.py`: Missing data analysis
-- `eda_feature_engineering.py`: Feature preprocessing pipeline
+- **ML.py**: Main model training and evaluation
+- **Final_code.py**: Complete analysis pipeline with feature selection
+- **eda.py**: Exploratory data analysis
+- **missing_counts.py**: Missing data analysis
+- **eda_feature_engineering.py**: Feature preprocessing pipeline
 
 ## Results and Performance
 
 ### Model Accuracy
-The final model demonstrates **practically useful accuracy** with predictions typically within ±2 years of actual satellite lifetimes. This level of precision is valuable for:
+The final model demonstrates practically useful accuracy with predictions typically within ±2 years of actual satellite lifetimes. This level of precision is valuable for:
+
 - Mission planning and resource estimation
 - Operational decision-making
 - Space debris mitigation strategies
@@ -93,14 +100,15 @@ Strong consistency between cross-validated training results and test set perform
 - **Linear Assumptions**: MLR may not capture complex non-linear interactions
 - **Data Granularity**: Potential inconsistencies across different eras and operators
 - **Model Simplicity**: Does not account for time-dependent effects or complex feature interactions
+- **Limited Feature Set**: Final model uses only 2 feature types due to data quality constraints
 
 ## Future Enhancements
 
 ### Advanced Modeling Approaches
-1. **Non-linear Algorithms**: Random Forest, Gradient Boosting, Support Vector Regression
-2. **Deep Learning**: Neural networks for complex pattern recognition
-3. **Time-Series Analysis**: Incorporating temporal degradation patterns
-4. **Uncertainty Quantification**: Prediction intervals for risk assessment
+- **Non-linear Algorithms**: Random Forest, Gradient Boosting, Support Vector Regression
+- **Deep Learning**: Neural networks for complex pattern recognition
+- **Time-Series Analysis**: Incorporating temporal degradation patterns
+- **Uncertainty Quantification**: Prediction intervals for risk assessment
 
 ### Data Expansion
 - Integration of additional data sources (engineering specifications, environmental data)
@@ -124,22 +132,22 @@ pip install -r requirements.txt
 # Run the main analysis
 python ML.py
 
+# Run complete analysis pipeline
+python Final_code.py
+
 # Perform exploratory data analysis
 python eda.py
 ```
 
 ## Contributing
-
 Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests to improve the model's accuracy and expand its capabilities.
 
 ## References
-
-1. Union of Concerned Scientists. (2023). *UCS Satellite Database*. Retrieved from [UCS Database](https://www.ucsusa.org/resources/satellite-database)
-2. Pedregosa, F., et al. (2011). Scikit-learn: Machine Learning in Python. *Journal of Machine Learning Research*, 12, 2825-2830.
-3. Harris, C. R., et al. (2020). Array programming with NumPy. *Nature*, 585(7825), 357-362.
+- Union of Concerned Scientists. (2023). UCS Satellite Database. Retrieved from [UCS Database](https://www.ucsusa.org/resources/satellite-database)
+- Pedregosa, F., et al. (2011). Scikit-learn: Machine Learning in Python. Journal of Machine Learning Research, 12, 2825-2830.
+- Harris, C. R., et al. (2020). Array programming with NumPy. Nature, 585(7825), 357-362.
 
 ## License
-
 This project is available under the MIT License. See LICENSE file for details.
 
 ---
